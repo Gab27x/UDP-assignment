@@ -1,0 +1,19 @@
+# Ignore macOs extra files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Ignore linux extra files
+*~
+
+# Ignore intellij config
+.idea/
+
+# Ignore compilation
+
+/out
+/bin
+/target
+*.class
+
+
