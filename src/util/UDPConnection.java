@@ -9,6 +9,7 @@ public class  UDPConnection extends Thread {
     private UDPConnection(){
 
     }
+    boolean running;
 
     private DatagramSocket socket;
 
@@ -18,6 +19,8 @@ public class  UDPConnection extends Thread {
         if(instance == null){
             instance = new UDPConnection();
         }
+
+
 
         return  instance;
     }
@@ -34,6 +37,7 @@ public class  UDPConnection extends Thread {
     @Override
     public void run(){
 
+
         //reception
         try {
             // soket habilita el poder establecer conexiones con el puerto
@@ -46,8 +50,26 @@ public class  UDPConnection extends Thread {
             //
             String msj = new String(packet.getData()).trim();
             System.out.println(msj);
-        }catch (IOException e){
+            System.out.println("COMPLETED");
+
+        }catch (IOException e) {
             System.out.println(e.toString());
-	} 
+        }
+
+    }
+    public void sendDatagram(String msj, String ipDest,int portDest){
+
+        try{
+
+            InetAddress ipAddress = InetAddress.getByName(ipDest);
+
+            DatagramPacket packet = new DatagramPacket(msj.getBytes(),msj.length(), ipAddress, portDest);
+            socket.send(packet);
+        }catch (SocketException | UnknownHostException e){
+
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
