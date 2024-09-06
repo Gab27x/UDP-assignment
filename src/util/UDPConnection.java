@@ -9,25 +9,27 @@ public class  UDPConnection extends Thread {
     private UDPConnection(){
 
     }
-    boolean running;
 
-    private DatagramSocket socket;
+    private static DatagramSocket socket;
 
     private static UDPConnection instance;
 
     public static UDPConnection getInstance(){
         if(instance == null){
             instance = new UDPConnection();
+            try {
+                socket = new DatagramSocket();  // Inicializa el socket sin puerto específico.
+            } catch (SocketException ignored) {
+
+            }
         }
-
-
 
         return  instance;
     }
 
     public void setPort(int port) {
         try{
-            this.socket = new DatagramSocket(port);
+            socket = new DatagramSocket(port);
         }catch (SocketException e) {
             throw new RuntimeException(e);
         }
@@ -45,7 +47,7 @@ public class  UDPConnection extends Thread {
             DatagramPacket packet = new DatagramPacket(new byte[16],16);
             System.out.println("Waiting ...");
             // recibir la informacion y almacenarla en el paquete
-            this.socket.receive(packet);
+            socket.receive(packet);
 
             //
             String msj = new String(packet.getData()).trim();
@@ -57,19 +59,26 @@ public class  UDPConnection extends Thread {
         }
 
     }
-    public void sendDatagram(String msj, String ipDest,int portDest){
+    public synchronized void sendDatagram(String msj, String ipDest,int portDest){
+
 
         try{
-
             InetAddress ipAddress = InetAddress.getByName(ipDest);
 
             DatagramPacket packet = new DatagramPacket(msj.getBytes(),msj.length(), ipAddress, portDest);
             socket.send(packet);
-        }catch (SocketException | UnknownHostException e){
-
+        }catch (SocketException | UnknownHostException ignored){
 
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+
+
+
+
+
+
+
     }
 }

@@ -14,6 +14,8 @@ public class Peer2 {
     public void send(String msj , String ipDest, int portDest){
         System.out.println(this.name + " sending");
         UDPConnection connection = UDPConnection.getInstance();
+        System.out.println(System.identityHashCode(connection));
+        System.out.println(connection.toString());
         connection.sendDatagram(msj, ipDest, portDest);
 
     }
@@ -21,13 +23,13 @@ public class Peer2 {
 
         System.out.println(this.name + " hearing");
         UDPConnection connection = UDPConnection.getInstance();
+        System.out.println(System.identityHashCode(connection));
         connection.setPort(myPort);
         connection.start();
 
     }
 
     public static void main(String[]args){
-
         Peer2 peer2 = new Peer2("gab",5001);
         peer2.hear();
 
