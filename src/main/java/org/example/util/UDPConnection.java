@@ -57,20 +57,24 @@ public class UDPConnection extends Thread {
 
     public void sendDatagram(String msj,String ipDest, int portDest){
 
-        try{
-            socket = new DatagramSocket();
+        new Thread(() -> {
+            try{
+                socket = new DatagramSocket();
 
-            InetAddress ipAddress = InetAddress.getByName(ipDest);
-            DatagramPacket packet = new DatagramPacket(msj.getBytes(),msj.length(),ipAddress,portDest);
-            socket.send(packet);
+                InetAddress ipAddress = InetAddress.getByName(ipDest);
+                DatagramPacket packet = new DatagramPacket(msj.getBytes(),msj.length(),ipAddress,portDest);
+                socket.send(packet);
 
 
-        }catch(SocketException | UnknownHostException e){
-            e.printStackTrace();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        socket.close();
+            }catch(SocketException | UnknownHostException e){
+                e.printStackTrace();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+        }).start();
+
+
 
 
 
