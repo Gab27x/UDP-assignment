@@ -2,46 +2,74 @@ package org.example;
 
 import org.example.interfaces.*;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.util.Objects;
 import java.util.Scanner;
+
 
 public class PeerA implements Receiver, Sender {
 
+
     public static void main(String[] args) {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+
         PeerA peerA = new PeerA();
-        peerA.hear(5000);
+        int port, portDest;
+        String ipDest;
+
+        System.out.println("Ingrese el puerto de escucha");
+        try {
+            port = Integer.parseInt(reader.readLine());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        System.out.println("Ingrese el puerto de destino");
+        try {
+            portDest = Integer.parseInt(reader.readLine());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println("Ingrese la dirección IP de destino");
+        try {
+            ipDest = reader.readLine();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+
+        String msj;
+        System.out.println("Primero escuchas y despues envias");
+
+        peerA.hear(port);
+
+
+        try {
+            msj = reader.readLine();
+            peerA.send(msj, ipDest, portDest);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     }
 
-    /*public static void main(String[] args)throws IOException {
-        var socket = new DatagramSocket(6001);
-        new Thread(()->{
-            try{
-                var buffer = new byte[1024];
-                var datagram = new DatagramPacket(buffer,buffer.length);
-                System.out.println("Esperando");
-                socket.receive(datagram);
-                var msg = new String(datagram.getData()).trim();
-                System.out.println(msg);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }).start();
 
-        Scanner scanner = new Scanner(System.in);
-        while (true){
-            var message = scanner.nextLine();
-            var metadata  = message.split("::");
-            var datagram = new DatagramPacket(
-                    metadata[0].getBytes(),
-                    metadata[0].getBytes().length,
-                    InetAddress.getByName(metadata[1]),
-                    6001
-            );
-            socket.send(datagram);
-        }
-    }*/
 }

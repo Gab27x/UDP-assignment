@@ -34,7 +34,7 @@ public class UDPConnection extends Thread {
 
 
     @Override
-    public void run() {
+    public synchronized void run() {
 
         try {
             //Empaquetar la información
@@ -49,6 +49,8 @@ public class UDPConnection extends Thread {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        socket.close();
 
 
     }
@@ -68,7 +70,7 @@ public class UDPConnection extends Thread {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
+        socket.close();
 
 
 
