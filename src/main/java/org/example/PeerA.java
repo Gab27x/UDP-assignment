@@ -1,13 +1,22 @@
 package org.example;
 
+import org.example.interfaces.*;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.util.Scanner;
 
-public class PeerA {
-    public static void main(String[] args)throws IOException {
+public class PeerA implements Receiver, Sender {
+
+    public static void main(String[] args) {
+        PeerA peerA = new PeerA();
+        peerA.hear(5000);
+
+    }
+
+    /*public static void main(String[] args)throws IOException {
         var socket = new DatagramSocket(6001);
         new Thread(()->{
             try{
@@ -34,5 +43,5 @@ public class PeerA {
             );
             socket.send(datagram);
         }
-    }
+    }*/
 }
